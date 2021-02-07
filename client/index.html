@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
     <title>Rest Api</title>
@@ -40,15 +40,35 @@
             v-model="form.value"
           />
         </div>
-        <button class="btn btn-primary" type="submit">Create</button>
+        <button class="btn btn-primary" type="submit" :disabled="!canCreate">
+          Create
+        </button>
       </form>
-      <div v-if="contacts.length">
+
+      <div v-if="loading">
+        <loader />
+      </div>
+
+      <div v-else-if="contacts.length">
         <div class="card mb-3" v-for="contact in contacts">
           <div class="card-body">
-            <h5 class="card-title">{{ contact.name }}</h5>
+            <h5
+              class="card-title"
+              :style="{color: contact.marked ? 'red' : 'black'}"
+            >
+              {{ contact.name }}
+            </h5>
             <p class="card-text">{{ contact.value }}</p>
-            <button class="btn btn-primary">CheckIn</button>
-            <button class="btn btn-danger">Delete</button>
+            <button
+              class="btn btn-primary"
+              @click="markContact(contact.id)"
+              :disabled="contact.marked"
+            >
+              Mark
+            </button>
+            <button class="btn btn-danger" @click="removeContact(contact.id)">
+              Delete
+            </button>
           </div>
         </div>
       </div>
